@@ -1,0 +1,14 @@
+Revision history for Perl extension Maypole::Plugin::Config::YAML.
+
+0.04  Sat Oct 16 18:00:00 2004
+        - renamed to Maypole::Plugin::Config::YAML
+
+0.03  Sun Oct 10 19:00:00 2004
+        - $MAYPOLE_CONFIG environment variable support
+
+0.02  Sun Sep 26 00:00:00 2004
+        - Maypole 2.0 support
+
+0.01  Tue Sep 07 09:00:00 2004
+
+        - initial release

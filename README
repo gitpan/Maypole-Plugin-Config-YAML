@@ -1,0 +1,91 @@
+NAME
+    Maypole::Plugin::Config::YAML - Simple YAML style config for Maypole
+
+SYNOPSIS
+    Inline config:
+
+        # MyApp.pm
+        package MyApp;
+
+        use strict;
+        use Maypole::Application qw(Config::YAML -Setup);
+
+        1;
+        __DATA__
+        --- #YAML:1.0
+        dsn: 'dbi:Pg:dbname=myapp'
+        user: myuser
+        pass: mypass
+        uri_base: 'http://127.0.0.1/myapp'
+        template_root: '/home/sri/myapp/templates'
+        rows_per_page: 10
+
+    Separate config file:
+
+        # MyApp.pm
+        package MyApp;
+
+        use strict;
+        use Maypole::Application qw(Config::YAML -Setup);
+
+        1;
+
+        # $ENV{MAYPOLE_CONFIG} = '/etc/myapp.yaml';
+        --- #YAML:1.0
+        dsn: 'dbi:Pg:dbname=myapp'
+        user: myuser
+        pass: mypass
+        uri_base: 'http://127.0.0.1/myapp'
+        template_root: '/home/sri/myapp/templates'
+        rows_per_page: 10
+
+    Advanced example:
+
+        # MyApp.pm
+        package MyApp;
+
+        use strict;
+        use Maypole::Application qw(Config::YAML Authentication::Abstract -Setup);
+
+        sub authenticate {
+            my ($self, $r) = @_;
+            $r->public;
+            if ($r->{action} eq 'edit') {
+                $r->private;
+                $r->{template} = 'login' unless $r->{user};
+            }
+        }
+
+        1;
+
+        # $ENV{MAYPOLE_CONFIG} = '/etc/myapp.yaml';
+        --- #YAML:1.0
+        dsn: 'dbi:Pg:dbname=myapp'
+        user: myuser
+        pass: mypass
+        uri_base: 'http://127.0.0.1/myapp'
+        template_root: '/home/sri/myapp/templates'
+        rows_per_page: 10
+        auth:
+          user_class: MyApp::Customer
+          session_class: Apache::Session::Postgres
+          session_args:
+            DataSource: 'dbi:Pg:dbname=myapp'
+            UserName: myuser
+            Password: mypass
+            TableName: session
+            Commit: 1
+
+DESCRIPTION
+    You can use the $MAYPOLE_CONFIG environment variable to tell it where to
+    find a YAML file or put your YAML in the DATA section.
+
+    Note that you need Maypole 2.0 or newer to use this module!
+
+AUTHOR
+    Sebastian Riedel, "sri@oook.de"
+
+LICENSE
+    This library is free software. You can redistribute it and/or modify it
+    under the same terms as perl itself.
+
